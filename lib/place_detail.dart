@@ -22,6 +22,33 @@ class PlaceDetailPage extends StatelessWidget {
               place.title,
               style: textTheme.title.copyWith(color: Colors.white),
             ),
+            pinned: true,
+            expandedHeight: 256,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  CachedNetworkImage(
+                    placeholder: Container(
+                      color: Colors.black12,
+                    ),
+                    imageUrl: place.pictures[0],
+                    fit: BoxFit.cover,
+                  ),
+                  // This gradient ensures that the toolbar icons are distinct
+                  // against the background image.
+                  const DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment(0.0, -1.0),
+                        end: Alignment(0.0, -0.2),
+                        colors: <Color>[Color(0x60000000), Color(0x00000000)],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
           _SliverGroupHeader(header: 'Position'),
           _SliverBoxContent(

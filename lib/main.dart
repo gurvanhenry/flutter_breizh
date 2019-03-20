@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_breizh/place_list.dart';
 
 void main() => runApp(BreizhApp());
 
@@ -7,14 +8,7 @@ class BreizhApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Breizh',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Flutter Breizh'),
-        ),
-        body: Center(
-          child: Text('Bonjour DevFest du Bout du Monde !'),
-        ),
-      ),
+      home: PlaceListPage(),
     );
   }
 }

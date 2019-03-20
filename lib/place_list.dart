@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_breizh/data/place.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PlaceListPage extends StatelessWidget {
   @override
@@ -7,18 +10,83 @@ class PlaceListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Flutter Breizh'),
       ),
-      body: _PlaceList(),
+      body: FutureBuilder<List<Place>>(
+        future: getPlaces(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('An error occurred'),
+            );
+           } else {
+            final places = snapshot.data
+                .where((place) =>
+                    place.pictures != null && place.pictures.length > 0)
+                .toList();
+            return _PlaceList(
+              places: places,
+            );
+          }
+        },
+      ),
     );
   }
 }
 
 class _PlaceList extends StatelessWidget {
+  _PlaceList({
+    Key key,
+    @required this.places,
+  }) : super(key: key);
+
+  final List<Place> places;
+
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: 200,
+      itemCount: places.length,
       separatorBuilder: (context, index) => Divider(),
-      itemBuilder: (context, index) => Text('$index (:)'),
+      itemBuilder: (context, index) => _PlaceTile(
+            place: places[index],
+          ),
     );
   }
+}
+
+class _PlaceTile extends StatelessWidget {
+  _PlaceTile({
+    Key key,
+    @required this.place,
+  }) : super(key: key);
+
+  final Place place;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: SizedBox(
+        width: 100,
+        height: 70,
+        child: CachedNetworkImage(
+          placeholder: Container(
+            color: Colors.black12,
+          ),
+          imageUrl: place.pictures[0],
+          fit: BoxFit.cover,
+        ),
+      ),
+      title: Text(place.title),
+      subtitle: Text(place.city),
+    );
+  }
+}
+
+/// Gets a list of places from data-tourisme API.
+Future<List<Place>> getPlaces() async {
+  String json;
+  json = await rootBundle.loadString('assets/places.json');
+  return placesFromJson(json);
 }

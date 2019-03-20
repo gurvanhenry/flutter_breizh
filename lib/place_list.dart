@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_breizh/data/place.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:http/http.dart' as http;
 
 class PlaceListPage extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class PlaceListPage extends StatelessWidget {
         title: Text('Flutter Breizh'),
       ),
       body: FutureBuilder<List<Place>>(
-        future: getPlaces(),
+        future: getPlaces_Api(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -83,10 +84,22 @@ class _PlaceTile extends StatelessWidget {
     );
   }
 }
-
-/// Gets a list of places from data-tourisme API.
+/// Gets a list of places from local file
 Future<List<Place>> getPlaces() async {
   String json;
   json = await rootBundle.loadString('assets/places.json');
+  return placesFromJson(json);
+}
+
+/// Gets a list of places from data-tourisme API.
+Future<List<Place>> getPlaces_Api() async {
+  String json;
+  final response = await http.get(
+      "http://www.data-tourisme-bretagne.com/dataserver/tourismebretagne/data/patnaturelBREfr?\$format=json&\$top=1000");
+  if (response.statusCode == 200) {
+    json = response.body;
+  } else {
+    json = await rootBundle.loadString('assets/places.json');
+  }
   return placesFromJson(json);
 }

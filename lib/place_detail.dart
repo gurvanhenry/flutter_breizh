@@ -50,7 +50,7 @@ class PlaceDetailPage extends StatelessWidget {
               ),
             ),
           ),
-          _SliverGroupHeader(header: 'Position'),
+          _SliverGroupHeader(header: 'Position',),
           _SliverBoxContent(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,6 +66,20 @@ class PlaceDetailPage extends StatelessWidget {
                 Text(
                   'Longitude : ${place.longitude}',
                   style: textTheme.subtitle,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                AspectRatio(
+                  aspectRatio: 1,
+                  child: CachedNetworkImage(
+                    placeholder: Container(
+                      color: Colors.black12,
+                    ),
+                    imageUrl:
+                        'https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${place.longitude},${place.latitude}&z=13&l=map,sat,skl&size=450,450',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ],
             ),

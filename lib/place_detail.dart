@@ -18,9 +18,12 @@ class PlaceDetailPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            title: Text(
-              place.title,
-              style: textTheme.title.copyWith(color: Colors.white),
+            title: Hero(
+              tag: 'title_${place.numid}',
+              child: Text(
+                place.title,
+                style: textTheme.title.copyWith(color: Colors.white),
+              ),
             ),
             pinned: true,
             expandedHeight: 256,
@@ -28,12 +31,15 @@ class PlaceDetailPage extends StatelessWidget {
               background: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  CachedNetworkImage(
-                    placeholder: Container(
-                      color: Colors.black12,
+                  Hero(
+                    tag: 'image_${place.numid}',
+                    child: CachedNetworkImage(
+                      placeholder: Container(
+                        color: Colors.black12,
+                      ),
+                      imageUrl: place.pictures[0],
+                      fit: BoxFit.cover,
                     ),
-                    imageUrl: place.pictures[0],
-                    fit: BoxFit.cover,
                   ),
                   // This gradient ensures that the toolbar icons are distinct
                   // against the background image.

@@ -78,13 +78,16 @@ class _PlaceTileState extends State<_PlaceTile> {
     return ListTile(
       leading: SizedBox(
         width: 100,
-        height: 70,
-        child: CachedNetworkImage(
-          placeholder: Container(
-            color: Colors.black12,
+        height: 56,
+        child: Hero(
+          tag: 'image_${widget.place.numid}',
+          child: CachedNetworkImage(
+            placeholder: Container(
+              color: Colors.black12,
+            ),
+            imageUrl: widget.place.pictures[0],
+            fit: BoxFit.cover,
           ),
-          imageUrl: widget.place.pictures[0],
-          fit: BoxFit.cover,
         ),
       ),
       trailing: IconButton(
@@ -95,7 +98,13 @@ class _PlaceTileState extends State<_PlaceTile> {
           });
         },
       ),
-      title: Text(widget.place.title),
+      title: Hero(
+        tag: 'title_${widget.place.numid}',
+        child: Text(
+          widget.place.title,
+          style: Theme.of(context).textTheme.subhead,
+        ),
+      ),
       subtitle: Text(widget.place.city),
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute(

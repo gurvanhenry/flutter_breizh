@@ -57,14 +57,21 @@ class _PlaceList extends StatelessWidget {
   }
 }
 
-class _PlaceTile extends StatelessWidget {
+class _PlaceTile extends StatefulWidget {
   _PlaceTile({
     Key key,
     @required this.place,
   }) : super(key: key);
 
   final Place place;
+  @override
+  _PlaceTileState createState() {
+    return new _PlaceTileState();
+  }
+}
 
+class _PlaceTileState extends State<_PlaceTile> {
+  bool isFavorite = false;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -75,12 +82,20 @@ class _PlaceTile extends StatelessWidget {
           placeholder: Container(
             color: Colors.black12,
           ),
-          imageUrl: place.pictures[0],
+          imageUrl: widget.place.pictures[0],
           fit: BoxFit.cover,
         ),
       ),
-      title: Text(place.title),
-      subtitle: Text(place.city),
+      trailing: IconButton(
+        icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
+        onPressed: () {
+          setState(() {
+            isFavorite = !isFavorite;
+          });
+        },
+      ),
+      title: Text(widget.place.title),
+      subtitle: Text(widget.place.city),
     );
   }
 }

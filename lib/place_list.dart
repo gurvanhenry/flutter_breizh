@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_breizh/data/place.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_breizh/place_detail.dart';
 
 class PlaceListPage extends StatelessWidget {
   @override
@@ -96,6 +97,13 @@ class _PlaceTileState extends State<_PlaceTile> {
       ),
       title: Text(widget.place.title),
       subtitle: Text(widget.place.city),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PlaceDetailPage(
+                place: widget.place,
+              ),
+        ),
+      ),
     );
   }
 }
